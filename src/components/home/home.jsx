@@ -10,6 +10,15 @@ const images = [
 
 const Home = () => {
   const [current, setCurrent] = useState(0)
+  const [showIntro, setShowIntro] = useState(false)
+
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('hasVisitedHome')
+    if (!hasVisited) {
+      setShowIntro(true)
+      sessionStorage.setItem('hasVisitedHome', 'true')
+    }
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,15 +39,18 @@ const Home = () => {
           />
         ))}
       </div>
-      <div className="home__text">
-        <h1>Bienvenido a la tienda de pedales</h1>
-        <p>
-          Nuestra pasión por el sonido nos llevó a crear pedales únicos, diseñados y construidos con amor en cada detalle.
-        </p>
-        <Link to="/tienda" className="home__btn">
-          Ver tienda
-        </Link>
-      </div>
+
+      {showIntro && (
+        <div className="home__text">
+          <h1>Bienvenido a la tienda de pedales</h1>
+          <p>
+            Nuestra pasión por el sonido nos llevó a crear pedales únicos, diseñados y construidos con amor en cada detalle.
+          </p>
+          <Link to="/tienda" className="home__btn">
+            Ver tienda
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
