@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './styles/nav.scss'
 import Logo from '../../assets/logo.png'
+import { CartContext } from '../../context/cartcontext'
 
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -9,6 +10,10 @@ const Nav = () => {
 
   const hasVisitedHome = sessionStorage.getItem('hasVisitedHome')
   const location = useLocation()
+
+  const { cart } = useContext(CartContext)
+  // Sumar cantidad total de items en carrito
+  const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0)
 
   const handleLogoClick = (e) => {
     if (hasVisitedHome && location.pathname === '/') {
@@ -33,7 +38,11 @@ const Nav = () => {
 
         <ul className={`nav__links ${menuOpen ? 'open' : ''}`}>
           <li><Link to="/tienda" onClick={() => setMenuOpen(false)}>Tienda</Link></li>
-          <li><Link to="/carrito" onClick={() => setMenuOpen(false)}>🛒 Carrito</Link></li>
+          <li>
+            <Link to="/carrito" onClick={() => setMenuOpen(false)}>
+              🛒 Carrito {totalQuantity > 0 && `(${totalQuantity})`}
+            </Link>
+          </li>
           <li><Link to="/clones" onClick={() => setMenuOpen(false)}>Clones</Link></li>
           <li><Link to="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link></li>
         </ul>
